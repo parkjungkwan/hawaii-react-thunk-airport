@@ -1,7 +1,8 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import './airport.css'
-
-
+import {useSelector, useDispatch} from "react-redux";
+import * as API from './store/airport.api'
+import { debounce } from 'throttle-debounce'
 
 const Airport = () => {
     const [loading , setLoading] = useState(false)
@@ -11,6 +12,19 @@ const Airport = () => {
     const [airports, setAirports] = useState([])
     const handleInput = e =>{}
     const selectAirport = item => {}
+    const results = useSelector(state => state.fetchAPI)
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        if(!results.data) fetch()
+        else
+            if(results.data.length > 0) changeTitle()
+        if(airport.city !== undefined) changeTitle()
+    })
+    let fetch = () => dispatch(API.airportSearch())
+    let fetched = () => setLoading(false)
+    let changeTitle = () => document.title = `공항 검색 결과: ${airport.airport}`
+    let searchAirports = debounce()
 
 
 
