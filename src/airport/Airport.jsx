@@ -27,14 +27,15 @@ const Airport = () => {
     const [selected, setSelected] = useState(false)
     const [airport, setAirport] = useState({})
     const [airports, setAirports] = useState([])
+    const results = useSelector(state => airportReducer)
+    const dispatch = useDispatch()
+
     const handleInput = e =>{ searchAirports(e.target.value.trim().toLowerCase())}
     const selectAirport = payload => {
         setSelected(true)
         setResult(false)
         setAirport({airport: payload.airport, city: payload.city, iata: payload.iata})
     }
-    const results = useSelector(state => state.airportReducer)
-    const dispatch = useDispatch()
 
     useEffect(()=>{
         if(!results.data) fetch()
