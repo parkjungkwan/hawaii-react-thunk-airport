@@ -27,20 +27,19 @@ const Airport = () => {
     const [selected, setSelected] = useState(false)
     const [airport, setAirport] = useState({})
     const [airports, setAirports] = useState([])
-    const results = useSelector(state => airportReducer)
-    const dispatch = useDispatch()
-
     const handleInput = e =>{ searchAirports(e.target.value.trim().toLowerCase())}
     const selectAirport = payload => {
         setSelected(true)
         setResult(false)
         setAirport({airport: payload.airport, city: payload.city, iata: payload.iata})
     }
+    const results = useSelector(state => airportReducer)
+    const dispatch = useDispatch()
 
     useEffect(()=>{
         if(!results.data) fetch()
         else
-            if(results.data.length > 0) changeTitle()
+        if(results.data.length > 0) changeTitle()
         if(airport.city !== undefined) changeTitle()
     })
     let fetch = () => dispatch(airportSearch())
@@ -58,15 +57,15 @@ const Airport = () => {
             case 1:
                 setAirports(data.filter(
                     e => e.airport.charAt(0).toLowerCase()=== input.toLowerCase()
-                    || e.city.toLowerCase().includes(input.toLowerCase())
-                    || e.iata.toLowerCase().includes(input.toLowerCase())))
+                        || e.city.toLowerCase().includes(input.toLowerCase())
+                        || e.iata.toLowerCase().includes(input.toLowerCase())))
                 setResult(true)
                 break
             default:
                 setAirports(data.filter(
                     e => e.airport.toLowerCase().includes(input.toLowerCase())
-                    || e.city.toLowerCase().includes(input.toLowerCase())
-                    || e.iata.toLowerCase().includes(input.toLowerCase())))
+                        || e.city.toLowerCase().includes(input.toLowerCase())
+                        || e.iata.toLowerCase().includes(input.toLowerCase())))
                 setResult(true)
                 break
         }

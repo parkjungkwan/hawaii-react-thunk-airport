@@ -10,9 +10,10 @@ import {Provider} from'react-redux'
 import { combineReducers } from "redux";
 import { airportReducer } from './airport/Airport'
 import { authReducer } from './member/Auth'
+import {memberChangerReducer} from "./member/MyPage";
 
 const rootReducer = combineReducers({
-    airportReducer, authReducer
+    airportReducer, authReducer, memberChangerReducer
 })
 
 ReactDOM.render(

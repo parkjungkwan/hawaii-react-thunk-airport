@@ -9,18 +9,40 @@ import {
 } from "mdbreact"
 
 const POST_AUTH = 'member/POST_AUTH'
+const FIND_PASS = 'member/FIND_PASS'
 const authAction = data => ({type: POST_AUTH, payload: data})
 export const authReducer = (state = {}, action) => {
     switch (action.type) {
         case POST_AUTH: return action.payload
+        case FIND_PASS: return action.payload
         default: return state
     }
 }
+
 const postAuth = data => dispatch => {
 
     axios.post("", data)
-        .then(res => { dispatch(authAction(res.data))})
+        .then(res => {
+            if(res.data){
+                sessionStorage.setItem('email', res.data.email)
+                sessionStorage.setItem('password', res.data.password)
+                sessionStorage.setItem('name', res.data.name)
+            }
+            dispatch(authAction(res.data))
+        })
         .catch(err => { throw(err) })
+}
+const findPass = data => dispatch =>{
+    axios.post("", data)
+        .then(res => {
+            if(res.data){
+                alert(`임시 비번이 발급되었습니다. email 체크바랍니다`)
+
+            }else{
+                alert(`잘못된 email 주소입니다.`)
+            }
+        })
+        .catch(err => {throw(err)})
 }
 
 export const Auth = () =>{
@@ -28,9 +50,8 @@ export const Auth = () =>{
     const [toggle, setToggle] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const {inputID, inputPW} = useSelector(state=>({inputID: state.authReducer.email,
-                                                             inputPW: state.authReducer.password}))
     const dispatch = useDispatch()
+    const memberInfo = useSelector(state => authReducer)
     const onChangeEmail = e => {
         alert(`입력한 값 1: ${e.target.value}`)
         setEmail(e.target.value)
@@ -40,16 +61,17 @@ export const Auth = () =>{
         setPassword(e.target.value)
     }
     const onClickLogin = e =>{
-        alert(`입력한 값 2: ${inputID}`)
-        dispatch(postAuth({email: inputID, password: inputPW}))
+        e.preventDefault()
+        alert(`입력 ID : ${email}, 입력 PW : ${password}`)
+        postAuth({email: email, password: password})
     }
     const onClickToggle = e => {
         setToggle({modal: !modal})
     }
     const onClickPassFind = e => {
-
+        e.preventDefault()
+        findPass({email: email})
     }
-
 
     return <>
         <MDBContainer className="py-5">
